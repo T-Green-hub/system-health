@@ -1,0 +1,86 @@
+{
+  "title": "System Health (ThinkPad)",
+  "timezone": "browser",
+  "schemaVersion": 37,
+  "version": 1,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Effective Hottest (°C)",
+      "gridPos": {"h": 5, "w": 6, "x": 0, "y": 0},
+      "targets": [{"expr": "system_health_effective_hottest_temp_c"}]
+    },
+    {
+      "type": "stat",
+      "title": "CPU Temp (°C)",
+      "gridPos": {"h": 5, "w": 6, "x": 6, "y": 0},
+      "targets": [{"expr": "system_health_cpu_temp_c"}]
+    },
+    {
+      "type": "stat",
+      "title": "NVMe Temp (°C)",
+      "gridPos": {"h": 5, "w": 6, "x": 12, "y": 0},
+      "targets": [{"expr": "system_health_nvme_temp_c"}]
+    },
+    {
+      "type": "stat",
+      "title": "Fan",
+      "gridPos": {"h": 5, "w": 6, "x": 18, "y": 0},
+      "targets": [{"expr": "system_health_fan_info"}],
+      "options": {
+        "reduceOptions": {"calcs": ["last"]},
+        "textMode": "value",
+        "valueMappings": [],
+        "colorMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "links": [],
+          "custom": {"displayMode": "auto"}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "timeSeries",
+      "title": "CPU Freq (MHz)",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 5},
+      "targets": [{"expr": "system_health_cpu_freq_avg_mhz"}]
+    },
+    {
+      "type": "timeSeries",
+      "title": "Load Averages",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 5},
+      "targets": [
+        {"expr": "system_health_load1"},
+        {"expr": "system_health_load5"},
+        {"expr": "system_health_load15"}
+      ]
+    },
+    {
+      "type": "gauge",
+      "title": "Memory Used (%)",
+      "gridPos": {"h": 6, "w": 6, "x": 0, "y": 13},
+      "targets": [{"expr": "system_health_memory_used_percent"}]
+    },
+    {
+      "type": "stat",
+      "title": "AC Online",
+      "gridPos": {"h": 6, "w": 6, "x": 6, "y": 13},
+      "targets": [{"expr": "system_health_power_ac_online"}]
+    },
+    {
+      "type": "stat",
+      "title": "Battery (%)",
+      "gridPos": {"h": 6, "w": 6, "x": 12, "y": 13},
+      "targets": [{"expr": "system_health_battery_capacity_percent"}]
+    },
+    {
+      "type": "stat",
+      "title": "Battery State",
+      "gridPos": {"h": 6, "w": 6, "x": 18, "y": 13},
+      "targets": [{"expr": "system_health_power_info"}]
+    }
+  ]
+}
