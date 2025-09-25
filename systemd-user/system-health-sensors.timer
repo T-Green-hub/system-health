@@ -1,0 +1,11 @@
+[Unit]
+Description=System-Health sensors feeder timer (every 5s)
+
+[Timer]
+OnUnitActiveSec=5
+AccuracySec=1s
+Unit=system-health-sensors.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target

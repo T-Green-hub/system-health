@@ -1,0 +1,6 @@
+[Unit]
+Description=System-Health sensors feeder (oneshot)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/sensors_reader.py

@@ -1,0 +1,10 @@
+[Unit]
+Description=System-Health — Normalize status.json → status.norm.json
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/system-health-normalize.sh
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=Run System-Health exporter periodically
+
+[Timer]
+OnBootSec=5s
+OnUnitActiveSec=15s
+AccuracySec=1s
+Unit=system-health-exporter.service
+
+[Install]
+WantedBy=default.target

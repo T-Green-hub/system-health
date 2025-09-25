@@ -1,0 +1,12 @@
+[Unit]
+Description=System-Health — metrics.prom updater (5s)
+
+[Timer]
+OnBootSec=10s
+OnUnitActiveSec=5s
+AccuracySec=1s
+Unit=system-health-metrics.service
+Persistent=true
+
+[Install]
+WantedBy=default.target

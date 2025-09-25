@@ -1,0 +1,21 @@
+[Unit]
+Description=System-Health — Top-Right Indicator (AppIndicator)
+After=graphical-session.target
+
+[Service]
+Type=simple
+Environment=PYTHONUNBUFFERED=1
+ExecStart=%h/.local/bin/system-health-indicator.py
+Restart=on-failure
+RestartSec=3
+
+# Lightweight hardening
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+
+[Install]
+WantedBy=default.target

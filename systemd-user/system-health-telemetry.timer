@@ -1,0 +1,13 @@
+# ~/.config/systemd/user/system-health-telemetry.timer
+[Unit]
+Description=System-Health — Telemetry timer (every 5 minutes, persistent)
+
+[Timer]
+OnBootSec=30s
+OnCalendar=*:0/5
+Persistent=true
+Unit=system-health-telemetry.service
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target

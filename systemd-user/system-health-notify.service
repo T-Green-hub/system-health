@@ -1,0 +1,13 @@
+[Unit]
+Description=System-Health desktop notification on state change
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/system-health-notify.sh
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes

@@ -1,0 +1,11 @@
+[Unit]
+Description=Poll status.json every 15s for state change
+
+[Timer]
+OnBootSec=7s
+OnUnitActiveSec=15s
+AccuracySec=1s
+Unit=system-health-notify.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,19 @@
+[Unit]
+Description=System-Health → Prometheus textfile metrics (governor)
+After=default.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/system-health-governor-metrics.sh
+# harmless sandboxing
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+LockPersonality=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+MemoryDenyWriteExecute=yes
+
+[Install]
+WantedBy=default.target

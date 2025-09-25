@@ -1,0 +1,6 @@
+[Unit]
+Description=System-Health Doctor (one-shot checks)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/tempctl doctor

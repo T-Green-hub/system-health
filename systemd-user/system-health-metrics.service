@@ -1,0 +1,10 @@
+[Unit]
+Description=System-Health — Write Prometheus textfile metrics from status.json
+Documentation=file:%h/.local/state/system-health/status.json
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/system-health-metrics-exporter.py
+
+[Install]
+WantedBy=default.target

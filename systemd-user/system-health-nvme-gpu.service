@@ -1,0 +1,15 @@
+[Unit]
+Description=System-Health NVMe/GPU sensor collector
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/system-health-nvme-gpu.sh
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+SystemCallFilter=@system-service

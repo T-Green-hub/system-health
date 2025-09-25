@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+
+# Editors & OS
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Node/GNOME Argos caches (if any)
+node_modules/
+.config/argos/**/cache/
+
+# Local runtime state/logs for System-Health (do not version machine data)
+.local/state/system-health/
+.local/share/system-health/logs/
+*.log
+
+# Build / packaging output
+dist/
+build/
+*.tar.gz
+*.zip
+
+# Secrets (if any added later)
+*.env
+.env.*

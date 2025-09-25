@@ -1,0 +1,11 @@
+[Unit]
+Description=Every 10s write governor.prom for node_exporter
+
+[Timer]
+OnBootSec=5s
+OnUnitActiveSec=10s
+AccuracySec=1s
+Unit=system-health-governor-metrics.service
+
+[Install]
+WantedBy=timers.target
