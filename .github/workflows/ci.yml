@@ -10,27 +10,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
       - name: Install linters
         run: |
           sudo apt-get update
-          sudo apt-get install -y shellcheck
-          python -m pip install --upgrade pip
-          pip install flake8
+          sudo apt-get install -y shellcheck shfmt python3-flake8
 
-      - name: Shellcheck bash scripts
+      - name: shellcheck
         run: |
-          bash -lc 'git ls-files "*.sh" | xargs -r shellcheck -x'
+          set -e
+          find . -type f -name "*.sh" -print0 | xargs -0 -I{} bash -lc 'shellcheck -x "{}"'
 
-      - name: Flake8 python
+      - name: shfmt (check only)
         run: |
-          FILES=$(git ls-files "*.py" || true)
-          if [ -n "$FILES" ]; then
-            flake8 --max-line-length=100 --extend-ignore=E203,W503 $FILES
+          set -e
+          # enforce tabs=2, indent, simplify, POSIX shell format checks only
+          find . -type f -name "*.sh" -print0 | xargs -0 shfmt -d -i 2 -ci -s
+
+      - name: flake8
+        run: |
+          set -e
+          if compgen -G "./**/*.py" > /dev/null; then
+            python3 -m flake8 .
           else
-            echo "No Python files to lint."
+            echo "No Python files; skipping flake8."
           fi
