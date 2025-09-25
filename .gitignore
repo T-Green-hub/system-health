@@ -1,37 +1,19 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
 *.egg-info/
-.eggs/
 .venv/
-venv/
-env/
+.env
 
-# Editors & OS
-*.swp
-*.swo
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
-
-# Node/GNOME Argos caches (if any)
-node_modules/
-.config/argos/**/cache/
-
-# Local runtime state/logs for System-Health (do not version machine data)
+# Logs & state
+*.log
+*.csv
 .local/state/system-health/
 .local/share/system-health/logs/
-*.log
 
-# Build / packaging output
-dist/
-build/
-*.tar.gz
-*.zip
+# Editor/OS
+.DS_Store
+Thumbs.db
 
-# Secrets (if any added later)
-*.env
-.env.*
+# Node exporter outputs
+var/lib/node_exporter/textfile_collector/*.prom

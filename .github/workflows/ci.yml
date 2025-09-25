@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install linters
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Shellcheck bash scripts
+        run: |
+          bash -lc 'git ls-files "*.sh" | xargs -r shellcheck -x'
+
+      - name: Flake8 python
+        run: |
+          FILES=$(git ls-files "*.py" || true)
+          if [ -n "$FILES" ]; then
+            flake8 --max-line-length=100 --extend-ignore=E203,W503 $FILES
+          else
+            echo "No Python files to lint."
+          fi

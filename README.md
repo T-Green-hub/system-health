@@ -1,26 +1,17 @@
-# System-Health (fan governor + sensors)
+# System-Health Fan Governor (ThinkPad)
 
-A lightweight, user-space thermal and fan-governor setup for Linux laptops (tested on ThinkPad), with:
-- Sensors reader → `status.json` + `history.csv`
-- Fan governor with hysteresis/dwell and AC/Battery maps
-- Watchdog timer to restart governor if status is stale
-- Optional Argos topbar badge (GNOME)
+Minimal, hardened fan governor + sensors pipeline for ThinkPads on Linux.
 
-## Quick start (user mode)
+## Components
+- `sensors_reader.py` → writes `~/.local/state/system-health/status.json` (5s)
+- `tempmon-governor.sh` → hysteresis + dwell, AC/BAT-aware
+- `tempctl.py` → holds (`tempctl hold 5 --minutes 10`) and `release`
+- `system-health-exporter.sh` → Prometheus textfile (`/var/lib/node_exporter/textfile_collector/system_health.prom`)
+- Units/timers: `system-health-sensors.timer`, `tempmon-governor.service`, watchdog, exporter timer
 
+## Quick start
 ```bash
-# Install prerequisites (Ubuntu/Debian)
-sudo apt-get update
-sudo apt-get install -y jq lm-sensors nvme-cli smartmontools
-
-# Enable thinkpad_acpi fan control (ThinkPad)
-sudo modprobe thinkpad_acpi fan_control=1
-echo 'options thinkpad_acpi fan_control=1' | sudo tee /etc/modprobe.d/thinkpad_acpi.conf
-
-# Install suite
-./install.sh
-
-# Status + control
-tempctl status
-tempctl hold 5 --minutes 10
-tempctl release
+systemctl --user enable --now system-health-sensors.timer
+systemctl --user enable --now tempmon-governor.service
+systemctl --user enable --now tempmon-watchdog.timer
+sudo systemctl enable --now system-health-exporter.timer
