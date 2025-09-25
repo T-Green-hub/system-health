@@ -1,0 +1,14 @@
+[Unit]
+Description=System-Health Fan Governor (baseline)
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/tempmon-governor.sh
+Restart=always
+RestartSec=2
+# Explicitly clear any inherited caps, just in case
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=default.target
