@@ -1,0 +1,89 @@
+groups:
+  - name: system-health.alerts
+    rules:
+      # --- TEMPERATURES ---
+      - alert: HighCPUOrCoreTemp
+        expr: max without(sensor) (system_health_cpu_temp_c) >= 85
+        for: 2m
+        labels: { severity: warning }
+        annotations:
+          summary: "CPU temperature high (≥85°C)"
+          description: "CPU temp is {{ $value }}°C for ≥2m."
+
+      - alert: CriticalHottestTemp
+        # prefer your 5m max recording if present, else fall back to live metric
+        expr: (sh:effective_hottest_c:max_5m >= 90) or (system_health_effective_hottest_temp_c >= 90)
+        for: 1m
+        labels: { severity: critical }
+        annotations:
+          summary: "🔥 System hottest temp critical (≥90°C)"
+          description: "Effective hottest is {{ $value }}°C for ≥1m."
+
+      - alert: HighNVMeTemp
+        expr: system_health_nvme_temp_c >= 70
+        for: 2m
+        labels: { severity: warning }
+        annotations:
+          summary: "NVMe running hot (≥70°C)"
+          description: "NVMe temp {{ $value }}°C for ≥2m."
+
+      - alert: HighGPUTemp
+        expr: system_health_gpu_temp_c >= 85
+        for: 2m
+        labels: { severity: warning }
+        annotations:
+          summary: "GPU temperature high (≥85°C)"
+          description: "GPU temp {{ $value }}°C for ≥2m."
+
+      # --- FAN / COOLING ---
+      - alert: FanStalled
+        expr: (system_health_fan_rpm == 0) and (system_health_effective_hottest_temp_c >= 60)
+        for: 45s
+        labels: { severity: critical }
+        annotations:
+          summary: "Fan appears stalled at high temperature"
+          description: "Fan RPM is 0 while hottest temp ≥60°C."
+
+      # --- POWER / BATTERY ---
+      - alert: OnBatteryLow
+        expr: (sh:ac_online == 0) and (system_health_battery_percent <= 20) and on() (max_over_time(system_health_effective_hottest_temp_c[5m]) >= 50)
+        for: 3m
+        labels: { severity: warning }
+        annotations:
+          summary: "On battery and getting warm (≤20%)"
+          description: "AC offline, battery {{ printf \"%.0f\" $value }}%, temps elevated."
+
+      - alert: FastDischarge
+        expr: (sh:battery_state == 1) and (rate(system_health_battery_percent[10m]) <= -0.5)
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: "Battery discharging fast (≥0.5%/min)"
+          description: "Battery draining quickly. Investigate load or power source."
+
+      # --- PIPELINE HEALTH ---
+      - alert: TextfileMetricsStale
+        # Node exporter exposes file mtimes via node_textfile_mtime_seconds; flag if stale > 2m
+        expr: (time() - node_textfile_mtime_seconds{job="node"}) > 120
+        for: 2m
+        labels: { severity: warning }
+        annotations:
+          summary: "Textfile collector metrics stale"
+          description: "textfile .prom files not refreshed in >2m."
+
+      - alert: SystemHealthExporterDown
+        expr: absent(system_health_up) or (min_over_time(system_health_up[5m]) < 1)
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: "System-Health exporter not reporting"
+          description: "system_health_up absent or 0 for ≥2m."
+
+      # --- SAFETY NETS ---
+      - alert: MissingKeyMetrics
+        expr: absent(system_health_effective_hottest_temp_c) or absent(node_textfile_mtime_seconds)
+        for: 2m
+        labels: { severity: warning }
+        annotations:
+          summary: "Missing expected metrics"
+          description: "One or more key metrics are absent (collector issue?)."
