@@ -1,0 +1,11 @@
+groups:
+  - name: sanity
+    rules:
+      - alert: AlwaysFiring
+        expr: vector(1)
+        for: 15s
+        labels:
+          severity: info
+        annotations:
+          summary: "Sanity check alert from Prometheus"
+          description: "This alert always fires; used to validate Prom -> Alertmanager -> receiver path."

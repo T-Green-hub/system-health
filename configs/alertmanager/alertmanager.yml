@@ -1,0 +1,42 @@
+# Alertmanager — production-friendly defaults with fast test delivery
+global:
+  resolve_timeout: 5m
+
+# Routing tree: ntfy is default; critical can be routed elsewhere later.
+route:
+  receiver: ntfy
+  group_by: ['alertname']
+  group_wait: 5s
+  group_interval: 30s
+  repeat_interval: 30m
+  routes:
+    # Synthetic test fast-lane (explicit match)
+    - receiver: ntfy
+      match:
+        alertname: TEST_Alert
+    # Example critical lane: swap 'pager' to real Slack/Email/PagerDuty later
+    - receiver: pager
+      match:
+        severity: critical
+
+# Silence warnings when a critical of the same alert is firing.
+inhibit_rules:
+  - source_match: { severity: critical }
+    target_match: { severity: warning }
+    equal: ['alertname']
+
+receivers:
+  # Default receiver used above
+  - name: ntfy
+    webhook_configs:
+      # For local webhook sink testing (ncat)
+      - url: 'http://127.0.0.1:18080'
+        send_resolved: true
+    # For real ntfy, replace the block above with:
+    # webhook_configs:
+    #   - url: 'https://ntfy.sh/<your-unique-topic>'
+    #     send_resolved: true
+
+  # Placeholder for a future paging channel (Slack/Email/PagerDuty)
+  - name: pager
+    # Add your real configs later (left intentionally empty for now)
