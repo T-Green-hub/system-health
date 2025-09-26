@@ -1,3 +1,9 @@
+
+## Metrics exporter (textfile)
+- Single-writer rule: only `system-health-governor-metrics.service` writes `/var/lib/node_exporter/textfile_collector/system_health.prom`.
+- Disable legacy timers/services: `system-health-exporter.timer/service`, `system-health-governor-metrics.timer`.
+- Script emits only numeric samples (skips missing) to avoid NaN/0 placeholders.
+
 # System-Health Fan Governor (ThinkPad)
 
 Minimal, hardened fan governor + sensors pipeline for ThinkPads on Linux.

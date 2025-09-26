@@ -1,0 +1,17 @@
+[Unit]
+Description=System-Health → Prometheus textfile metrics
+After=default.target
+
+[Service]
+Type=simple
+Environment=OUT_DIR=/var/lib/node_exporter/textfile_collector
+ExecStart=/usr/bin/env bash -lc '~/.local/bin/system-health-metrics.sh --loop 5'
+Restart=always
+RestartSec=1
+NoNewPrivileges=yes
+ProtectHome=read-only
+ProtectSystem=full
+PrivateTmp=yes
+
+[Install]
+WantedBy=default.target
