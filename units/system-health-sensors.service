@@ -1,0 +1,16 @@
+[Unit]
+Description=System-Health Sensors Reader (writes status.json)
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env bash -lc 'while true; do ~/.local/bin/sensors_reader.py; sleep 4; done'
+Restart=always
+RestartSec=1
+NoNewPrivileges=yes
+ProtectHome=read-only
+ProtectSystem=full
+PrivateTmp=yes
+
+[Install]
+WantedBy=default.target
